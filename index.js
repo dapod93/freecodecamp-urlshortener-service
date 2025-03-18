@@ -1,11 +1,10 @@
 require("dotenv").config();
+const { Sequelize, Model, DataTypes } = require("sequelize");
+const { URL } = require("url");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const dns = require("dns").promises;
 const express = require("express");
-const { URL } = require("url");
-const { Sequelize, Model, DataTypes } = require("sequelize");
-const { url } = require("inspector");
 
 const app = express();
 const sequelize = new Sequelize({ dialect: "sqlite", storage: "./db.sqlite" });
