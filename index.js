@@ -54,7 +54,7 @@ app.post("/api/shorturl", async function (req, res) {
     res.json({ error: "limit reached" });
   }
 
-  const urlShortener = await UrlShortener.create({ url: req.body.url });
+  const [urlShortener, _] = await UrlShortener.findOrCreate({ where: { url: req.body.url } });
   res.json({ original_url: req.body.url, short_url: urlShortener.id });
 });
 
