@@ -27,7 +27,7 @@ app.get("/", function (req, res) {
   res.sendFile(process.cwd() + "/views/index.html");
 });
 
-app.post("/api/shorturl", async function (req, res) {
+app.post("/api/shorturl", function (req, res) {
   if (req.body.url === null || req.body.url === "") {
     return res.json({ error: "invalid url" });
   }
@@ -39,14 +39,14 @@ app.post("/api/shorturl", async function (req, res) {
     return res.json({ error: "invalid url" });
   }
 
-  await dns.lookup(hostname, (err) => {
+  dns.lookup(hostname, (err) => {
     if (err) {
       return res.json({ error: "invalid hostname" });
     }
-  });
 
-  const urlShortener = await UrlShortener.create({ url: req.body.url });
-  res.json({ original_url: req.body.url, short_url: urlShortener.id });
+    const urlShortener = UrlShortener.create({ url: req.body.url });
+    res.json({ original_url: req.body.url, short_url: urlShortener.id });
+  });
 });
 
 app.get("/api/shorturl/:shorturl", async function (req, res) {
