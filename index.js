@@ -39,12 +39,12 @@ app.post("/api/shorturl", function (req, res) {
     return res.json({ error: "invalid url" });
   }
 
-  dns.lookup(hostname, (err) => {
+  dns.lookup(hostname, async (err) => {
     if (err) {
       return res.json({ error: "invalid hostname" });
     }
 
-    const urlShortener = UrlShortener.create({ url: req.body.url });
+    const urlShortener = await UrlShortener.create({ url: req.body.url });
     res.json({ original_url: req.body.url, short_url: urlShortener.id });
   });
 });
