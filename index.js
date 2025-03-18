@@ -45,7 +45,7 @@ app.post("/api/shorturl", async function (req, res) {
     return res.json({ error: "invalid hostname" });
   }
 
-  const urlShortener = await UrlShortener.build({ url: req.body.url });
+  const urlShortener = await UrlShortener.create({ url: req.body.url });
   res.json({ original_url: req.body.url, short_url: urlShortener.id });
 });
 
