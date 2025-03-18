@@ -29,6 +29,11 @@ app.get("/", function (req, res) {
 });
 
 app.post("/api/shorturl", async function (req, res) {
+  // To prevent database spamming, since using free deployment platform
+  if ((await UrlShortener.count()) >= 10) {
+    res.json({ error: "limit reached" });
+  }
+
   if (!req.body.url.startsWith("http://") && !req.body.url.startsWith("https://")) {
     return res.json({ error: "invalid url" });
   }
@@ -48,10 +53,6 @@ app.post("/api/shorturl", async function (req, res) {
     await dns.lookup(hostname);
   } catch (err) {
     return res.json({ error: "invalid hostname" });
-  }
-
-  if ((await UrlShortener.count()) >= 10) {
-    res.json({ error: "limit reached" });
   }
 
   const [urlShortener, _] = await UrlShortener.findOrCreate({ where: { url: req.body.url } });
