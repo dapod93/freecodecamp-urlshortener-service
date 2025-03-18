@@ -28,6 +28,10 @@ app.get("/", function (req, res) {
 });
 
 app.post("/api/shorturl", async function (req, res) {
+  if (!req.body.url.startsWith("http://") && !req.body.url.startsWith("https://")) {
+    return res.json({ error: "invalid url" });
+  }
+
   if (req.body.url === null || req.body.url === "") {
     return res.json({ error: "invalid url" });
   }
