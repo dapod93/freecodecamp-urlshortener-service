@@ -5,6 +5,7 @@ const dns = require("dns").promises;
 const express = require("express");
 const { URL } = require("url");
 const { Sequelize, Model, DataTypes } = require("sequelize");
+const { url } = require("inspector");
 
 const app = express();
 const sequelize = new Sequelize({ dialect: "sqlite", storage: "./db.sqlite" });
@@ -47,6 +48,10 @@ app.post("/api/shorturl", async function (req, res) {
     await dns.lookup(hostname);
   } catch (err) {
     return res.json({ error: "invalid hostname" });
+  }
+
+  if ((await UrlShortener.count()) >= 10) {
+    res.json({ error: "limit reached" });
   }
 
   const urlShortener = await UrlShortener.create({ url: req.body.url });
